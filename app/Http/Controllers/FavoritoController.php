@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Favorito;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class FavoritoController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $user = Auth::user();
+        //return Favorito::all();
+        return Favorito::where('cod_usuario',$user->id)->get();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request -> validate([
+            'cod_usuario' => 'required',
+            //'cod_producto' => 'required'
+        ]);
+
+        $user = Auth::user();
+
+        $favorito = new Favorito;
+        $favorito -> cod_usuario = $request-> cod_usuario;
+        $favorito -> cod_producto = $user->id;
+        $favorito -> save();
+
+        return $favorito;
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Favorito $favorito)
+    {
+        $user = Auth::user();
+        
+        if($user->id != $favorito->cod_usuario)
+        {
+            return [
+                'message' => 'Error: usuario no válido'
+            ];
+        }else
+        {
+            return $favorito;
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Favorito $favorito)
+    {
+        $request -> validate([
+            //'cod_usuario' => 'required',
+            'cod_producto' => 'required',
+            'nombre'    => 'required'
+        ]);
+
+        $user = Auth::user();
+
+        if($user->id != $favorito->cod_usuario)
+        {
+            return [
+                'message' => 'Error: usuario no válido'
+            ];
+        }else
+        {
+            //$favorito -> cod_usuario = $request-> cod_usuario;
+            $favorito -> cod_producto = $request-> cod_producto;
+            $favorito -> nombre = $request-> nombre;
+            $favorito -> update();
+
+            return $favorito;
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $favorito = Favorito::find($id);
+
+        $user = Auth::user();
+
+        if(is_null($favorito)){
+            return response("Error", 404);
+        }
+
+        if($user->id != $favorito->cod_usuario)
+        {
+            return [
+                'message' => 'Error: usuario no válido'
+            ];
+        }else
+        {
+            $favorito -> delete();
+
+            return response()->noContent();
+        }
+    }
+}
