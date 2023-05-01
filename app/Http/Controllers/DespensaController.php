@@ -33,6 +33,7 @@ class DespensaController extends Controller
         $despensa = new Despensa;
         $despensa -> despensa = $request-> despensa;
         $despensa -> cod_usuario = $user->id;
+        $despensa -> idioma = $request-> idioma;
         $despensa -> save();
 
         return $despensa;
@@ -106,6 +107,17 @@ class DespensaController extends Controller
             $despensa -> delete();
 
             return response()->noContent();
+        }
+    }
+    public static function inicializar($id){
+        $despensas = ["Nevera","Congelador","Armario"];
+
+        foreach ($despensas as $item){
+            $despensa = Despensa::create([
+                'despensa' => $item,
+                'cod_usuario' => $id,
+                'idioma' => "SPA"
+            ]);
         }
     }
 }

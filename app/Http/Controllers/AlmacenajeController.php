@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Almacenaje;
+use App\Models\Despensa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AlmacenajeController extends Controller
 {
@@ -15,6 +17,7 @@ class AlmacenajeController extends Controller
     {
         $user = Auth::user();
         //return Almacenaje::all();
+
         return Almacenaje::where('cod_usuario',$user->id)->get();
     }
 
@@ -121,5 +124,19 @@ class AlmacenajeController extends Controller
 
             return response()->noContent();
         }
+    }
+    public function vistaDespensa(Despensa $despensa)
+    {
+         $user = Auth::user();
+         $almacenaje = DB::select(
+             'SELECT a.cod_almacenaje,p.cod_producto,p.producto,a.cantidad,u.unidad,a.fec_almac,
+             p.comprar,p.favorito,a.cod_despensa 
+             FROM `almacenajes` a
+             LEFT OUTER JOIN productos p ON p.cod_producto = a.cod_producto
+             LEFT OUTER JOIN units u on u.cod_unidad = a.cod_unidad
+            where a.cod_despensa = '.$despensa->cod_despensa.' AND a.cod_usuario = '.$user->id
+         );
+        return $almacenaje;
+
     }
 }

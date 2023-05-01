@@ -11,5 +11,5 @@ class Lista_compra extends Model
 
     protected $table = 'lista_compras';
     protected $primaryKey = 'cod_lista';
-    protected $fillable = ['cod_usuario','cod_producto','nombre'];
+    protected $fillable = ['cod_usuario','nombre','estado'];
 }

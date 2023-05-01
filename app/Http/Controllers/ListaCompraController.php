@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lista_compra;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ListaCompraController extends Controller
 {
@@ -25,16 +26,17 @@ class ListaCompraController extends Controller
     {
         $request -> validate([
             //'cod_usuario' => 'required',
-            'cod_producto' => 'required',
-            'nombre'    => 'required'
+           // 'cod_producto' => 'required',
+           // 'nombre'    => 'required'
         ]);
 
         $user = Auth::user();
 
         $lista_compra = new Lista_compra;
         $lista_compra -> cod_usuario = $user->id;
-        $lista_compra -> cod_producto = $request-> cod_producto;
+      //  $lista_compra -> cod_producto = $request-> cod_producto;
         $lista_compra -> nombre = $request-> nombre;
+        $lista_compra -> estado = $request-> estado;
         $lista_compra -> save();
 
         return $lista_compra;
@@ -79,8 +81,10 @@ class ListaCompraController extends Controller
         }else
         {
         // $lista_compra -> cod_usuario = $request-> cod_usuario;
-            $lista_compra -> cod_producto = $request-> cod_producto;
+        //    $lista_compra -> cod_producto = $request-> cod_producto;
             $lista_compra -> nombre = $request-> nombre;
+            $lista_compra -> estado = $request-> estado;
+
             $lista_compra -> update();
 
             return $lista_compra;
@@ -111,5 +115,31 @@ class ListaCompraController extends Controller
 
             return response()->noContent();
         }
+    }
+    public static function getEnCurso(){
+        $user = Auth::user();
+        //  $lista = Lista_compra::where('cod_usuario',$user->id)->get();
+        //  where('estado',"En curso")->get();
+
+        $lista = DB::table('lista_compras')->where([
+            ['cod_usuario','=',$user->id],
+            ['estado','=','En curso']
+        ])->first();
+
+        // $lista = new Lista_compra;
+        // $lista = DB::select(
+        //     'SELECT * FROM lista_compras WHERE estado = "En curso" 
+        //     and cod_usuario = '.$user->id
+        // );
+        // $prueba = $cod_curso->estado;
+         return $lista->cod_lista;
+    }
+
+    public static function inicializar($id){
+        $lista = Lista_compra::create([
+            'cod_usuario' => $id,
+            'nombre' => "",
+            'estado' => "En curso",
+        ]);
     }
 }

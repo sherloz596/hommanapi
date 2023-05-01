@@ -11,5 +11,5 @@ class Despensa extends Model
 
     protected $table = 'despensas';
     protected $primaryKey = 'cod_despensa';
-    protected $fillable = ['despensa','cod_usuario'];
+    protected $fillable = ['despensa','cod_usuario','idioma'];
 }

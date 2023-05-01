@@ -108,4 +108,16 @@ class UnitController extends Controller
             return response()->noContent();
         }
     }
+    public static function inicializar($id){
+        $units = ["Gramos","Kilos","Litros","Latas","Botellas","Bricks","Unidades","Filetes"];
+
+        foreach ($units as $item){
+            $unit = Unit::create([
+                'unidad' => $item,
+                'abreviatura' => "",
+                'cod_usuario' => $id,
+                'idioma' => "SPA"
+            ]);
+        }
+    }
 }

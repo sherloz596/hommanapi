@@ -9,6 +9,11 @@ use Validator;
 use App\Models\User;
 use App\Models\Despensa;
 use App\Models\Unit;
+use App\Models\Producto;
+use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\DespensaController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\ListaCompraController;
 
 class AuthController extends Controller
 {
@@ -31,51 +36,12 @@ class AuthController extends Controller
       ]);
 
 # INTRODUCCIÓN DE DATOS DE DESPENSAS Y UNIDADES POR DEFECTO
-      $despensa = Despensa::create([
-        'despensa' => "Nevera",
-        'cod_usuario' => $user->id
-      ]);
 
-      $despensa = Despensa::create([
-        'despensa' => "Congelador",
-        'cod_usuario' => $user->id
-      ]);
 
-      $unit = Unit::create([
-        'unidad' => "Gramos",
-        'abreviatura' => "g",
-        'cod_usuario' => $user->id
-      ]);
-
-      $unit = Unit::create([
-        'unidad' => "Kilos",
-        'abreviatura' => "Kg",
-        'cod_usuario' => $user->id
-      ]);
-
-      $unit = Unit::create([
-        'unidad' => "Litros",
-        'abreviatura' => "l",
-        'cod_usuario' => $user->id
-      ]);
-
-      $unit = Unit::create([
-        'unidad' => "Latas",
-        'abreviatura' => "",
-        'cod_usuario' => $user->id
-      ]);
-
-      $unit = Unit::create([
-        'unidad' => "Botellas",
-        'abreviatura' => "",
-        'cod_usuario' => $user->id
-      ]);
-
-      $unit = Unit::create([
-        'unidad' => "Bricks",
-        'abreviatura' => "",
-        'cod_usuario' => $user->id
-      ]);
+      DespensaController::inicializar($user->id);
+      UnitController::inicializar($user->id);
+      ProductoController::inicializar($user->id);
+      ListaCompraController::inicializar($user->id);
 
 
       $token = $user->createToken('auth_token')->plainTextToken;

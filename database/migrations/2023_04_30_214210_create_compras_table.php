@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('units', function (Blueprint $table) {
-            $table->increments('cod_unidad');
-            $table->string('unidad',20);
-            $table->string('abreviatura',5);
+        Schema::create('compras', function (Blueprint $table) {
+            $table->increments('cod_linea');
+            $table->unsignedInteger('cod_lista');
             $table->unsignedbigInteger('cod_usuario');
-            $table->string('idioma',3);
+            $table->unsignedInteger('cod_producto');
+            $table->string('nombre',20);
+            $table->string('estado_producto',20);
             $table->timestamps();
-            
-            $table->unique(['unidad', 'cod_usuario']);
-            $table->foreign('cod_usuario')->references('id')->on('users');
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('units');
+        Schema::dropIfExists('compras');
     }
 };

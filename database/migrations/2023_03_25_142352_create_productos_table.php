@@ -15,6 +15,9 @@ return new class extends Migration
             $table->increments('cod_producto');
             $table->string('producto',30);
             $table->unsignedbigInteger('cod_usuario');
+            $table->integer('comprar');
+            $table->integer('favorito');
+            $table->string('idioma',3);
             $table->timestamps();
             
             $table->unique(['producto', 'cod_usuario']);
