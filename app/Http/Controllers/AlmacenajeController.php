@@ -32,7 +32,7 @@ class AlmacenajeController extends Controller
             'cod_despensa'   => 'required',
             'cod_unidad'     => 'required',
             'cantidad'       => 'required',
-            'fec_almac' => 'required'
+           // 'fec_almac' => 'required'
         ]);
 
         $user = Auth::user();
@@ -43,7 +43,7 @@ class AlmacenajeController extends Controller
         $almacenaje -> cod_despensa   = $request-> cod_despensa;
         $almacenaje -> cod_unidad     = $request-> cod_unidad;
         $almacenaje -> cantidad       = $request-> cantidad;
-        $almacenaje -> fec_almac = $request-> fec_almac;
+        $almacenaje -> fec_almac = now();
         $almacenaje -> save();
 
         return $almacenaje;

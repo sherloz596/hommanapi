@@ -32,6 +32,10 @@ class ListaCompraController extends Controller
 
         $user = Auth::user();
 
+        if($request -> estado === 'En curso'){
+
+        }
+
         $lista_compra = new Lista_compra;
         $lista_compra -> cod_usuario = $user->id;
       //  $lista_compra -> cod_producto = $request-> cod_producto;
@@ -67,8 +71,8 @@ class ListaCompraController extends Controller
     {
         $request -> validate([
             //'cod_usuario' => 'required',
-            'cod_producto' => 'required',
-            'nombre'    => 'required'
+            //'cod_producto' => 'required',
+            //'nombre'    => 'required'
         ]);
 
         $user = Auth::user();

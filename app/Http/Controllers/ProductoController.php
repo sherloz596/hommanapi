@@ -18,7 +18,9 @@ class ProductoController extends Controller
     {
         $user = Auth::user();
         //return Producto::all();
-        return Producto::where('cod_usuario',$user->id)->get();
+        return Producto::where('cod_usuario',$user->id)
+        ->orderBy('producto')
+        ->get();
     }
 
     /**

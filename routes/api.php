@@ -47,4 +47,5 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::put('up_comprar/{producto}', [ProductoController::class, 'upComprar']);
      Route::get('compra', [ListaCompraLinController::class, 'verCompra']);
      Route::put('up_estado', [ListaCompraLinController::class, 'upEstado']);
+     Route::get('ver_anteriores/{lista_compra}', [ListaCompraLinController::class, 'verAnteriores']);
 });

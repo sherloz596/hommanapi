@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lista_compra_lin;
+use App\Models\Lista_compra;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -40,7 +41,7 @@ class ListaCompraLinController extends Controller
         $lista_compra_lin -> cod_lista = $request->cod_lista;
         $lista_compra_lin -> cod_usuario = $user->id;
         $lista_compra_lin -> cod_producto = $request-> cod_producto;
-        $lista_compra_lin -> nombre = $request-> nombre;
+        $lista_compra_lin -> nombre = "";
         $lista_compra_lin -> estado_producto = $request-> estado_producto;
         $lista_compra_lin -> save();
 
@@ -114,7 +115,7 @@ class ListaCompraLinController extends Controller
      */
     public function destroy(Lista_compra_lin $lista_compra_lin)
     {
-        $lista_compra_lin = Lista_compra_lin::find($id);
+       // $lista_compra_lin = Lista_compra_lin::find($id);
 
         $user = Auth::user();
 
@@ -140,7 +141,10 @@ class ListaCompraLinController extends Controller
         $lista = DB::table('lista_compra_lins')
             -> leftJoin('productos','lista_compra_lins.cod_producto','=','productos.cod_producto')
             -> leftJoin('lista_compras','lista_compra_lins.cod_lista','=','lista_compras.cod_lista')
-            -> select('lista_compra_lins.cod_linea','lista_compra_lins.cod_lista','productos.cod_producto','productos.producto','lista_compra_lins.estado_producto')
+            -> select('lista_compra_lins.cod_linea','lista_compra_lins.cod_lista',
+                'productos.cod_producto','productos.cod_usuario','productos.idioma',
+                'productos.producto','productos.comprar','productos.favorito',
+                'lista_compra_lins.estado_producto')
             -> get();
         
         return $lista;
@@ -152,5 +156,22 @@ class ListaCompraLinController extends Controller
         DB::statement(
             'UPDATE lista_compra_lins SET estado_producto = '.$request->estado_producto.
             ' WHERE cod_linea = '.$lista_compra_lin->cod_linea);
+    }
+
+    public function verAnteriores(Lista_compra $lista_compra){
+        $user = Auth::user();
+        $lista_compra_lin = DB::table('lista_compra_lins')
+            -> leftJoin('productos','lista_compra_lins.cod_producto','=','productos.cod_producto')
+            ->where([
+            ['lista_compra_lins.cod_usuario','=',$user->id],
+            ['cod_lista','=',$lista_compra->cod_lista]
+             ])
+            -> select('lista_compra_lins.cod_linea','lista_compra_lins.cod_lista',
+            'productos.cod_producto','productos.cod_usuario','productos.idioma',
+            'productos.producto','productos.comprar','productos.favorito',
+            'lista_compra_lins.estado_producto')
+            ->get();
+             
+        return $lista_compra_lin;
     }
 }
