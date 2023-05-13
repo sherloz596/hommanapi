@@ -29,6 +29,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register', [AuthController::class,'register']);
 Route::post('login', [AuthController::class,'login']);
+Route::post('recovery', [AuthController::class,'recoveryPass']);
+Route::post('reset', [AuthController::class,'resetPassword']);
+
 
 
 Route::middleware('auth:sanctum')->group(function (){
@@ -45,7 +48,9 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get('almacenaje/{despensa}', [AlmacenajeController::class, 'vistaDespensa']);
     Route::get('lista_curso', [ListaCompraController::class, 'getEnCurso']);
     Route::put('up_comprar/{producto}', [ProductoController::class, 'upComprar']);
-     Route::get('compra', [ListaCompraLinController::class, 'verCompra']);
-     Route::put('up_estado', [ListaCompraLinController::class, 'upEstado']);
-     Route::get('ver_anteriores/{lista_compra}', [ListaCompraLinController::class, 'verAnteriores']);
+    Route::get('compra', [ListaCompraLinController::class, 'verCompra']);
+    Route::get('compra_curso', [ListaCompraLinController::class, 'verCompraCurso']);
+    Route::put('up_estado', [ListaCompraLinController::class, 'upEstado']);
+    Route::get('ver_anteriores/{lista_compra}', [ListaCompraLinController::class, 'verAnteriores']);
 });
+

@@ -149,6 +149,22 @@ class ListaCompraLinController extends Controller
         
         return $lista;
     }
+
+    public function verCompraCurso(){
+        $user = Auth::user();
+
+        $lista = DB::table('lista_compra_lins')
+            -> leftJoin('productos','lista_compra_lins.cod_producto','=','productos.cod_producto')
+            -> leftJoin('lista_compras','lista_compra_lins.cod_lista','=','lista_compras.cod_lista')
+            -> select('lista_compra_lins.cod_linea','lista_compra_lins.cod_lista',
+                'productos.cod_producto','productos.cod_usuario','productos.idioma',
+                'productos.producto','productos.comprar','productos.favorito',
+                'lista_compra_lins.estado_producto')
+            -> where('lista_compras.estado','=','En curso')
+            -> get();
+        
+        return $lista;
+    }
     
     public function upEstado(Request $request, Lista_compra_lin $lista_compra_lin){
         $user = Auth::user();

@@ -77,7 +77,7 @@ class AlmacenajeController extends Controller
             'cod_despensa'   => 'required',
             'cod_unidad'     => 'required',
             'cantidad'       => 'required',
-            'fec_almac'      => 'required'
+            //'fec_almac'      => 'required'
         ]);
 
         $user = Auth::user();
@@ -93,7 +93,7 @@ class AlmacenajeController extends Controller
             $almacenaje -> cod_despensa   = $request-> cod_despensa;
             $almacenaje -> cod_unidad     = $request-> cod_unidad;
             $almacenaje -> cantidad       = $request-> cantidad;
-            $almacenaje -> fec_almac      = $request-> fec_almac;
+            $almacenaje -> fec_almac      = $almacenaje-> fec_almac;
             $almacenaje -> update();
 
             return $almacenaje;
@@ -130,7 +130,7 @@ class AlmacenajeController extends Controller
          $user = Auth::user();
          $almacenaje = DB::select(
              'SELECT a.cod_almacenaje,p.cod_producto,p.producto,a.cantidad,u.unidad,a.fec_almac,
-             p.comprar,p.favorito,a.cod_despensa 
+             p.comprar,p.favorito,a.cod_despensa, a.cod_unidad 
              FROM `almacenajes` a
              LEFT OUTER JOIN productos p ON p.cod_producto = a.cod_producto
              LEFT OUTER JOIN units u on u.cod_unidad = a.cod_unidad
