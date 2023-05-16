@@ -14,8 +14,15 @@ class FavoritoController extends Controller
     public function index()
     {
         $user = Auth::user();
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
         //return Favorito::all();
-        return Favorito::where('cod_usuario',$user->id)->get();
+        return Favorito::where('cod_usuario',$cod_user)->get();
     }
 
     /**
@@ -30,9 +37,16 @@ class FavoritoController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         $favorito = new Favorito;
         $favorito -> cod_usuario = $request-> cod_usuario;
-        $favorito -> cod_producto = $user->id;
+        $favorito -> cod_producto = $cod_user;
         $favorito -> save();
 
         return $favorito;
@@ -44,8 +58,15 @@ class FavoritoController extends Controller
     public function show(Favorito $favorito)
     {
         $user = Auth::user();
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
         
-        if($user->id != $favorito->cod_usuario)
+        if($cod_user != $favorito->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -69,7 +90,14 @@ class FavoritoController extends Controller
 
         $user = Auth::user();
 
-        if($user->id != $favorito->cod_usuario)
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
+        if($cod_user != $favorito->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -94,11 +122,18 @@ class FavoritoController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         if(is_null($favorito)){
             return response("Error", 404);
         }
 
-        if($user->id != $favorito->cod_usuario)
+        if($cod_user != $favorito->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'

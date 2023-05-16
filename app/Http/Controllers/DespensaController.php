@@ -14,8 +14,17 @@ class DespensaController extends Controller
     public function index()
     {
         $user = Auth::user();
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
         //return Despensa::all();
-        return Despensa::where('cod_usuario',$user->id)->get();
+        return Despensa::where('cod_usuario',$cod_user)
+        -> where('idioma', '=', $user -> idioma)
+        ->get();
     }
 
     /**
@@ -30,9 +39,16 @@ class DespensaController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         $despensa = new Despensa;
         $despensa -> despensa = $request-> despensa;
-        $despensa -> cod_usuario = $user->id;
+        $despensa -> cod_usuario = $cod_user;
         $despensa -> idioma = $request-> idioma;
         $despensa -> save();
 
@@ -45,8 +61,15 @@ class DespensaController extends Controller
     public function show(Despensa $despensa)
     {
         $user = Auth::user();
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
         
-        if($user->id != $despensa->cod_usuario)
+        if($cod_user != $despensa->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -69,7 +92,14 @@ class DespensaController extends Controller
 
         $user = Auth::user();
 
-        if($user->id != $despensa->cod_usuario)
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
+        if($cod_user != $despensa->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -93,11 +123,18 @@ class DespensaController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         if(is_null($despensa)){
             return response("Error", 404);
         }
 
-        if($user->id != $despensa->cod_usuario)
+        if($cod_user != $despensa->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -111,12 +148,21 @@ class DespensaController extends Controller
     }
     public static function inicializar($id){
         $despensas = ["Nevera","Congelador","Armario"];
+        $desp_eng = ["Fridge","Freezer","Pantry"];
 
         foreach ($despensas as $item){
             $despensa = Despensa::create([
                 'despensa' => $item,
                 'cod_usuario' => $id,
                 'idioma' => "SPA"
+            ]);
+        };
+
+        foreach ($desp_eng as $item){
+            $despensa = Despensa::create([
+                'despensa' => $item,
+                'cod_usuario' => $id,
+                'idioma' => "ENG"
             ]);
         }
     }

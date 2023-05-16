@@ -37,6 +37,7 @@ Route::post('reset', [AuthController::class,'resetPassword']);
 Route::middleware('auth:sanctum')->group(function (){
 
     Route::get('logout', [AuthController::class,'logout']);
+    Route::post('invitar', [AuthController::class,'invitar']);
     Route::apiResource('despensas',DespensaController::class);
     Route::apiResource('units',UnitController::class);
     Route::apiResource('productos',ProductoController::class);

@@ -12,6 +12,7 @@ use App\Models\Despensa;
 use App\Models\Unit;
 use App\Models\Producto;
 use App\Mail\MailPassword;
+use App\Mail\MailGuest;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\DespensaController;
 use App\Http\Controllers\UnitController;
@@ -25,7 +26,8 @@ class AuthController extends Controller
       $validator = Validator::make($request->all(),[
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8'
+        'password' => 'required|string|min:8',
+        'idioma' => 'required'
       ]);
       
       if($validator->fails()){
@@ -35,16 +37,19 @@ class AuthController extends Controller
       $user = User::create([
         'name' => $request->name,
         'email' => $request->email,
-        'password' => Hash::make($request->password)
+        'password' => Hash::make($request->password),
+        'idioma' => $request->idioma,
+        'invitado' => $request->invitado
       ]);
+      
+      # INTRODUCCIÓN DE DATOS DE DESPENSAS Y UNIDADES POR DEFECTO
 
-# INTRODUCCIÓN DE DATOS DE DESPENSAS Y UNIDADES POR DEFECTO
-
-
-      DespensaController::inicializar($user->id);
-      UnitController::inicializar($user->id);
-      ProductoController::inicializar($user->id);
-      ListaCompraController::inicializar($user->id);
+      if ($user->invitado === null){
+        DespensaController::inicializar($user->id);
+        UnitController::inicializar($user->id);
+        ProductoController::inicializar($user->id);
+        ListaCompraController::inicializar($user->id);
+      }
 
 
       $token = $user->createToken('auth_token')->plainTextToken;
@@ -87,9 +92,7 @@ class AuthController extends Controller
     {
       $request->validate([
         'email' => 'required|email|exists:users',
-      ]);
-      // Mail::to('sherloz596@gmail.com')->send(new MailPassword());
-      
+      ]);      
       $user = User::where('email',$request['email'])->firstOrFail();
       $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -141,5 +144,19 @@ class AuthController extends Controller
           'message' => "Usuario no válido"
         ];
       }
+    }
+
+    public function invitar(Request $request)
+    {
+      $request->validate([
+        'email' => 'required',
+      ]);   
+      
+      $user = Auth::user();
+      
+      Mail::to($request->email)->send(new MailGuest($user,$request->email));
+      return[
+        'message' => 'Mail enviado'
+      ];
     }
 }

@@ -15,7 +15,15 @@ class CompraController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return Compra::where('cod_usuario',$user->id)->get();
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+        
+        return Compra::where('cod_usuario',$cod_user)->get();
     }
 
     /**

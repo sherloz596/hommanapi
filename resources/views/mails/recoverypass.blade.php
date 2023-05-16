@@ -10,6 +10,3 @@
         <a href="{{ url('http://localhost:8080/reset/'.$user->id.'/'.$token) }}">Resetear contraseña</a>
     </body>
 </html>
-
-<!-- <a href="{{ url("/usuarios/{$user->id}") }}">Ver detalles</a>
-<a href="{{ url('/usuarios/'.$user->id) }}">Ver detalle</a> -->

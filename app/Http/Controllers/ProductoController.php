@@ -17,8 +17,14 @@ class ProductoController extends Controller
     public function index()
     {
         $user = Auth::user();
-        //return Producto::all();
-        return Producto::where('cod_usuario',$user->id)
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+        return Producto::where('cod_usuario',$cod_user)
         ->orderBy('producto')
         ->get();
     }
@@ -35,9 +41,16 @@ class ProductoController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         $producto = new Producto;
         $producto -> producto = $request-> producto;
-        $producto -> cod_usuario = $user->id;
+        $producto -> cod_usuario = $cod_user;
         $producto -> comprar = 0;
         $producto -> favorito = 0;
         $producto -> save();
@@ -52,7 +65,14 @@ class ProductoController extends Controller
     {
         $user = Auth::user();
         
-        if($user->id != $producto->cod_usuario)
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+        
+        if($cod_user != $producto->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -76,7 +96,14 @@ class ProductoController extends Controller
 
         $user = Auth::user();
 
-        if($user->id != $producto->cod_usuario)
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
+        if($cod_user != $producto->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -86,7 +113,7 @@ class ProductoController extends Controller
             $producto -> producto = $request-> producto;
             $producto -> comprar = $request-> comprar;
             $producto -> favorito = $request-> favorito;
-            $producto -> cod_usuario = $user->id;
+            $producto -> cod_usuario = $cod_user;
             $producto -> update();
 
             return $producto;
@@ -102,11 +129,18 @@ class ProductoController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         if(is_null($producto)){
             return response("Error", 404);
         }
 
-        if($user->id != $producto->cod_usuario)
+        if($cod_user != $producto->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -137,6 +171,13 @@ class ProductoController extends Controller
 
     public function upComprar(Request $request, Producto $producto){
         $user = Auth::user();
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
         //$lista_curso = new Lista_Compra;
         $lista_curso = ListaCompraController::getEnCurso();
         
@@ -145,13 +186,13 @@ class ProductoController extends Controller
               $producto -> comprar = 1;
               $producto -> favorito = $request-> favorito;
               $producto -> idioma = $request-> idioma;
-              $producto -> cod_usuario = $user->id;
+              $producto -> cod_usuario = $cod_user;
               $producto -> update();
 
               DB::table('lista_compra_lins')->insert(
                 [
                     'cod_lista' => $lista_curso,
-                    'cod_usuario' => $user->id,
+                    'cod_usuario' => $cod_user,
                     'cod_producto' => $producto->cod_producto,
                     'nombre' => '',
                     'estado_producto' => 'En curso'
@@ -167,13 +208,13 @@ class ProductoController extends Controller
               $producto -> comprar = 0;
               $producto -> favorito = $request-> favorito;
               $producto -> idioma = $request-> idioma;
-              $producto -> cod_usuario = $user->id;
+              $producto -> cod_usuario = $cod_user;
               $producto -> update();
 
               DB::table('lista_compra_lins')->where([
                 ['cod_lista','=',$lista_curso],
                 ['cod_producto','=',$producto->cod_producto],
-                ['cod_usuario','=',$user->id]
+                ['cod_usuario','=',$cod_user]
               ])->delete();
             //   $compra = DB::statement(
             //       'DELETE FROM lista_compra_lins WHERE

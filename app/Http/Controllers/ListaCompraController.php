@@ -15,8 +15,14 @@ class ListaCompraController extends Controller
     public function index()
     {
         $user = Auth::user();
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
         //return Lista_compra::all();
-        return Lista_compra::where('cod_usuario',$user->id)->get();
+        return Lista_compra::where('cod_usuario',$cod_user)->get();
     }
 
     /**
@@ -32,12 +38,19 @@ class ListaCompraController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         if($request -> estado === 'En curso'){
 
         }
 
         $lista_compra = new Lista_compra;
-        $lista_compra -> cod_usuario = $user->id;
+        $lista_compra -> cod_usuario = $cod_user;
       //  $lista_compra -> cod_producto = $request-> cod_producto;
         $lista_compra -> nombre = $request-> nombre;
         $lista_compra -> estado = $request-> estado;
@@ -52,8 +65,15 @@ class ListaCompraController extends Controller
     public function show(Lista_compra $lista_compra)
     {
         $user = Auth::user();
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
         
-        if($user->id != $lista_compra->cod_usuario)
+        if($cod_user != $lista_compra->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -77,7 +97,14 @@ class ListaCompraController extends Controller
 
         $user = Auth::user();
 
-        if($user->id != $lista_compra->cod_usuario)
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
+        if($cod_user != $lista_compra->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -104,11 +131,18 @@ class ListaCompraController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         if(is_null($lista_compra)){
             return response("Error", 404);
         }
 
-        if($user->id != $lista_compra->cod_usuario)
+        if($cod_user != $lista_compra->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -122,11 +156,19 @@ class ListaCompraController extends Controller
     }
     public static function getEnCurso(){
         $user = Auth::user();
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         //  $lista = Lista_compra::where('cod_usuario',$user->id)->get();
         //  where('estado',"En curso")->get();
 
         $lista = DB::table('lista_compras')->where([
-            ['cod_usuario','=',$user->id],
+            ['cod_usuario','=',$cod_user],
             ['estado','=','En curso']
         ])->first();
 

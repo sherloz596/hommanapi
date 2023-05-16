@@ -14,8 +14,14 @@ class UnitController extends Controller
     public function index()
     {
         $user = Auth::user();
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
         //return Unit::all();
-        return Unit::where('cod_usuario',$user->id)->get();
+        return Unit::where('cod_usuario',$cod_user)->get();
     }
 
     /**
@@ -30,10 +36,17 @@ class UnitController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         $unit = new Unit;
         $unit -> unidad = $request-> unidad;
         $unit -> abreviatura = $request-> abreviatura;
-        $unit -> cod_usuario = $user->id;
+        $unit -> cod_usuario = $cod_user;
         $unit -> save();
 
         return $unit;
@@ -45,7 +58,15 @@ class UnitController extends Controller
     public function show(Unit $unit)
     {
         $user = Auth::user();
-        if($user->id != $unit->cod_usuario)
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
+        if($cod_user != $unit->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -67,7 +88,15 @@ class UnitController extends Controller
         ]);
 
         $user = Auth::user();
-        if($user->id != $unit->cod_usuario)
+
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
+        if($cod_user != $unit->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
@@ -92,11 +121,18 @@ class UnitController extends Controller
 
         $user = Auth::user();
 
+        if ($user->invitado === null)
+        {
+            $cod_user = $user->id;
+        }else{
+            $cod_user = $user->invitado;
+        }
+
         if(is_null($unit)){
             return response("Error", 404);
         }
 
-        if($user->id != $unit->cod_usuario)
+        if($cod_user != $unit->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
