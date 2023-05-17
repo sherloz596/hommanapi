@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('cod_despensa');
             $table->string('despensa',20);
             $table->unsignedbigInteger('cod_usuario');
-            $table->string('idioma',5);
+            $table->string('idioma',20);
             $table->timestamps();
 
             $table->unique(['despensa', 'cod_usuario']);

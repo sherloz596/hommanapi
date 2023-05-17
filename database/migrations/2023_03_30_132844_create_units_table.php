@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('unidad',20);
             $table->string('abreviatura',5);
             $table->unsignedbigInteger('cod_usuario');
-            $table->string('idioma',3);
+            $table->string('idioma',20);
             $table->timestamps();
             
             $table->unique(['unidad', 'cod_usuario']);

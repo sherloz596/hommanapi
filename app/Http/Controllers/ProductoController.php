@@ -24,8 +24,14 @@ class ProductoController extends Controller
         }else{
             $cod_user = $user->invitado;
         }
+
+        if ($user -> idioma === 'SPA'){
+            $orden = 'producto';
+        }else{
+            $orden = 'idioma';
+        }
         return Producto::where('cod_usuario',$cod_user)
-        ->orderBy('producto')
+        ->orderBy($orden)
         ->get();
     }
 
@@ -153,18 +159,141 @@ class ProductoController extends Controller
         }
     }
     public static function inicializar($id){
-        $productos = ["Leche","Pollo","Ternera","Jamón","Chorizo","Salchichón","Mortadela","Café",
-        "Galletas","Yogures","Pan de molde","Azúcar","Harina","Pan rallado","Ajos","Lentejas",
-        "Garbanzos","Judías","Langostinos","Gambas","Almejas","Calamares","Huevos","Patatas",
-        "Cebollas","Pimiento verde","Pimiento rojo","Calabacines","Berenjenas","Lechuga","Pepinos"];
+        $json = '[
+            {
+                "producto" :"Leche",
+                "idioma"   : "Milk"
+            },
+            {
+                "producto" :"Pollo",
+                "idioma"   : "Chicken"
+            },
+            {
+                "producto" :"Ternera",
+                "idioma"   : "Beef"
+            },
+            {
+                "producto" :"Jamón",
+                "idioma"   : "Ham"
+            }, 
+            {
+                "producto" :"Chorizo",
+                "idioma"   : "Sausage"
+            },
+            {
+                "producto" :"Salchichón",
+                "idioma"   : "Salami"
+            },            
+            {
+                "producto" :"Café",
+                "idioma"   : "Coffee"
+            },
+            {
+                "producto" :"Galletas",
+                "idioma"   : "Cookies"
+            },            
+            {
+                "producto" :"Yogures",
+                "idioma"   : "Yogurts"
+            },
+            {
+                "producto" :"Pan de molde",
+                "idioma"   : "Bread"
+            },
+            {
+                "producto" :"Azúcar",
+                "idioma"   : "Sugar"
+            },            
+            {
+                "producto" :"Harina",
+                "idioma"   : "Flour"
+            },
+            {
+                "producto" :"Pan rallado",
+                "idioma"   : "Bread crumbs"
+            },
+            {
+                "producto" :"Ajos",
+                "idioma"   : "Garlics"
+            },            {
+                "producto" :"Lentejas",
+                "idioma"   : "Lentils"
+            },
+            {
+                "producto" :"Garbanzos",
+                "idioma"   : "Chickpeas"
+            },
+            {
+                "producto" :"Judías",
+                "idioma"   : "Beans"
+            },            
+            {
+                "producto" :"Langostinos",
+                "idioma"   : "Prawns"
+            },
+            {
+                "producto" :"Gambas",
+                "idioma"   : "Shrimps"
+            },
+            {
+                "producto" :"Almejas",
+                "idioma"   : "Clams"
+            },    
+            {
+                "producto" :"Calamares",
+                "idioma"   : "Squids"
+            },
+            {
+                "producto" :"Huevos",
+                "idioma"   : "Eggs"
+            },
+            {
+                "producto" :"Patatas",
+                "idioma"   : "Potatoes"
+            },
+            {
+                "producto" :"Cebollas",
+                "idioma"   : "Onions"
+            },             
+            {
+                "producto" :"Pimiento verde",
+                "idioma"   : "Green pepper"
+            },
+            {
+                "producto" :"Pimiento rojo",
+                "idioma"   : "Red pepper"
+            },
+            {
+                "producto" :"Calabacines",
+                "idioma"   : "Zucchini"
+            },            
+            {
+                "producto" :"Berenjenas",
+                "idioma"   : "Eggplants"
+            },
+            {
+                "producto" :"Lechuga",
+                "idioma"   : "Lettuce"
+            },
+            {
+                "producto" :"Pepinos",
+                "idioma"   : "Cucumbers"
+            }
+        ]';
+
+        $productos = json_decode($json);
+        // $productos = ["Leche","Pollo","Ternera","Jamón","Chorizo","Salchichón","Mortadela","Café",
+        // "Galletas","Yogures","Pan de molde","Azúcar","Harina","Pan rallado","Ajos","Lentejas",
+        // "Garbanzos","Judías","Langostinos","Gambas","Almejas","Calamares","Huevos","Patatas",
+        // "Cebollas","Pimiento verde","Pimiento rojo","Calabacines","Berenjenas","Lechuga","Pepinos"];
 
          foreach ($productos as $item){
              $producto = Producto::create([
-                 'producto' => $item,
+                 'producto' => $item->producto,
                  'cod_usuario' => $id,
                  'comprar' => 0,
                  'favorito' => 0,
-                 'idioma' => "SPA"
+                 'idioma' => $item->idioma
              ]);
          }
     }

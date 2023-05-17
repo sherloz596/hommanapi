@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function (){
 
     Route::get('logout', [AuthController::class,'logout']);
     Route::post('invitar', [AuthController::class,'invitar']);
+    Route::post('change_lan', [AuthController::class,'changeLan']);
     Route::apiResource('despensas',DespensaController::class);
     Route::apiResource('units',UnitController::class);
     Route::apiResource('productos',ProductoController::class);

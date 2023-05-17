@@ -146,6 +146,15 @@ class AuthController extends Controller
       }
     }
 
+    public function changeLan(Request $request){
+      $user = Auth::user();
+      User::where('id', $user->id)->update(['idioma' => $request->idioma]);
+
+      return [
+        'message' => "OK"
+      ];
+    }
+
     public function invitar(Request $request)
     {
       $request->validate([

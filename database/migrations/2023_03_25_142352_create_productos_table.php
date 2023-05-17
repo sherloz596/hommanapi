@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedbigInteger('cod_usuario');
             $table->integer('comprar');
             $table->integer('favorito');
-            $table->string('idioma',3);
+            $table->string('idioma',30);
             $table->timestamps();
             
             $table->unique(['producto', 'cod_usuario']);

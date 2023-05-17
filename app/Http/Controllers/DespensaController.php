@@ -23,7 +23,6 @@ class DespensaController extends Controller
         }
         //return Despensa::all();
         return Despensa::where('cod_usuario',$cod_user)
-        -> where('idioma', '=', $user -> idioma)
         ->get();
     }
 
@@ -147,23 +146,52 @@ class DespensaController extends Controller
         }
     }
     public static function inicializar($id){
-        $despensas = ["Nevera","Congelador","Armario"];
-        $desp_eng = ["Fridge","Freezer","Pantry"];
+        $json = '[
+            {
+                "despensa" :"Nevera",
+                "idioma"   : "Fridge"
+            },
+            {
+                "despensa" :"Congelador",
+                "idioma"   : "Freezer"
+            },
+            {
+                "despensa" :"Armario",
+                "idioma"   : "Pantry"
+            }
+        ]';
+
+        $despensas = json_decode($json);
+        // $despensas[] = array (
+        //         'despensa' => 'Nevera',
+        //         'idioma'   => 'Fridge');
+            
+        //    array_push($despensas,array (
+        //         'despensa' => 'Congelador',
+        //         'idioma'   => 'Freezer'
+        //    ));
+                
+        //    array_push($despensas,array (
+        //         'despensa' => 'Armario',
+        //         'idioma'   => 'Pantry'
+        //     ));
+
+        // $desp_eng = ["Fridge","Freezer","Pantry"];
 
         foreach ($despensas as $item){
             $despensa = Despensa::create([
-                'despensa' => $item,
+                'despensa' => $item->despensa,
                 'cod_usuario' => $id,
-                'idioma' => "SPA"
+                'idioma' => $item->idioma
             ]);
         };
 
-        foreach ($desp_eng as $item){
-            $despensa = Despensa::create([
-                'despensa' => $item,
-                'cod_usuario' => $id,
-                'idioma' => "ENG"
-            ]);
-        }
+        // foreach ($desp_eng as $item){
+        //     $despensa = Despensa::create([
+        //         'despensa' => $item,
+        //         'cod_usuario' => $id,
+        //         'idioma' => "ENG"
+        //     ]);
+        // }
     }
 }
