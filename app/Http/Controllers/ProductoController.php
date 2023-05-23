@@ -57,6 +57,7 @@ class ProductoController extends Controller
         $producto = new Producto;
         $producto -> producto = $request-> producto;
         $producto -> cod_usuario = $cod_user;
+        $producto -> idioma = $request-> idioma;
         $producto -> comprar = 0;
         $producto -> favorito = 0;
         $producto -> save();
@@ -117,6 +118,7 @@ class ProductoController extends Controller
         }else
         {
             $producto -> producto = $request-> producto;
+            $producto -> idioma = $request-> idioma;
             $producto -> comprar = $request-> comprar;
             $producto -> favorito = $request-> favorito;
             $producto -> cod_usuario = $cod_user;

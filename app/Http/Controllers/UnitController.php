@@ -45,7 +45,8 @@ class UnitController extends Controller
 
         $unit = new Unit;
         $unit -> unidad = $request-> unidad;
-        $unit -> abreviatura = $request-> abreviatura;
+        $unit -> abreviatura = "";
+        $unit -> idioma = $request -> idioma;
         $unit -> cod_usuario = $cod_user;
         $unit -> save();
 
@@ -104,7 +105,7 @@ class UnitController extends Controller
         }else
         {
             $unit -> unidad = $request-> unidad;
-            $unit -> abreviatura = $request-> abreviatura;
+            $unit -> abreviatura = "";
             //$unit -> cod_usuario = $request-> cod_usuario;
             $unit -> update();
 
