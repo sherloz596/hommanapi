@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Despensa;
+use App\Models\Tarea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class DespensaController extends Controller
+
+class TareaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +22,9 @@ class DespensaController extends Controller
         }else{
             $cod_user = $user->invitado;
         }
-        return Despensa::where('cod_usuario',$cod_user)
+
+        return Tarea::where('cod_usuario',$cod_user)
+        ->orderBy('ultimo_realizado')
         ->get();
     }
 
@@ -31,7 +34,7 @@ class DespensaController extends Controller
     public function store(Request $request)
     {
         $request -> validate([
-            'despensa'    => 'required',
+            'tarea' => 'required',
         ]);
 
         $user = Auth::user();
@@ -43,22 +46,23 @@ class DespensaController extends Controller
             $cod_user = $user->invitado;
         }
 
-        $despensa = new Despensa;
-        $despensa -> despensa = $request-> despensa;
-        $despensa -> cod_usuario = $cod_user;
-        $despensa -> idioma = $request-> idioma;
-        $despensa -> save();
+        $tarea = new Tarea;
+        $tarea -> tarea = $request-> tarea;
+        $tarea -> frecuencia = $request-> frecuencia;
+        $tarea -> cod_usuario = $cod_user;
+        $tarea -> ultimo_realizado = $request-> ultimo_realizado;
+        $tarea -> save();
 
-        return $despensa;
+        return $tarea;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Despensa $despensa)
+    public function show(Tarea $tarea)
     {
         $user = Auth::user();
-
+        
         if ($user->invitado === null)
         {
             $cod_user = $user->id;
@@ -66,24 +70,25 @@ class DespensaController extends Controller
             $cod_user = $user->invitado;
         }
         
-        if($cod_user != $despensa->cod_usuario)
+        if($cod_user != $tarea->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
             ];
         }else
         {
-            return $despensa;
+            return $tarea;
         }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Despensa $despensa)
+    public function update(Request $request, Tarea $tarea)
     {
         $request -> validate([
-            'despensa'    => 'required',
+            'tarea'    => 'required',
+           // 'cod_usuario' => 'required'
         ]);
 
         $user = Auth::user();
@@ -95,17 +100,20 @@ class DespensaController extends Controller
             $cod_user = $user->invitado;
         }
 
-        if($cod_user != $despensa->cod_usuario)
+        if($cod_user != $tarea->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
             ];
         }else
         {
-            $despensa -> despensa = $request-> despensa;
-            $despensa -> update();
+            $tarea -> tarea = $request-> tarea;
+            $tarea -> frecuencia = $request-> frecuencia;
+            $tarea -> ultimo_realizado = $request-> ultimo_realizado;
+            $tarea -> cod_usuario = $cod_user;
+            $tarea -> update();
 
-            return $despensa;
+            return $tarea;
         }
     }
 
@@ -114,7 +122,7 @@ class DespensaController extends Controller
      */
     public function destroy($id)
     {
-        $despensa = Despensa::find($id);
+        $tarea = Tarea::find($id);
 
         $user = Auth::user();
 
@@ -125,48 +133,20 @@ class DespensaController extends Controller
             $cod_user = $user->invitado;
         }
 
-        if(is_null($despensa)){
+        if(is_null($tarea)){
             return response("Error", 404);
         }
 
-        if($cod_user != $despensa->cod_usuario)
+        if($cod_user != $tarea->cod_usuario)
         {
             return [
                 'message' => 'Error: usuario no válido'
             ];
         }else
         {
-            $despensa -> delete();
+            $tarea -> delete();
 
             return response()->noContent();
         }
-    }
-    public static function inicializar($id){
-        $json = '[
-            {
-                "despensa" :"Nevera",
-                "idioma"   : "Fridge"
-            },
-            {
-                "despensa" :"Congelador",
-                "idioma"   : "Freezer"
-            },
-            {
-                "despensa" :"Armario",
-                "idioma"   : "Pantry"
-            }
-        ]';
-
-        $despensas = json_decode($json);
-
-
-        foreach ($despensas as $item){
-            $despensa = Despensa::create([
-                'despensa' => $item->despensa,
-                'cod_usuario' => $id,
-                'idioma' => $item->idioma
-            ]);
-        };
-
     }
 }

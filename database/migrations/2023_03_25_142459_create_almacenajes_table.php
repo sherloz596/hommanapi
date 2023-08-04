@@ -21,8 +21,9 @@ return new class extends Migration
             $table->date('fec_almac');
             $table->timestamps();
             
-            $table->foreign('cod_producto')->references('cod_producto')->on('productos');
-            $table->foreign('cod_despensa')->references('cod_despensa')->on('despensas');
+            $table->foreign('cod_producto')->references('cod_producto')->on('productos')->onDelete('cascade');
+            $table->foreign('cod_despensa')->references('cod_despensa')->on('despensas')->onDelete('cascade');
+            $table->foreign('cod_unidad')->references('cod_unidad')->on('units')->onDelete('cascade');
             $table->foreign('cod_usuario')->references('id')->on('users');
         });
     }

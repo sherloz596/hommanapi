@@ -11,6 +11,8 @@ use App\Http\Controllers\ListaCompraController;
 use App\Http\Controllers\AlmacenajeController;
 use App\Http\Controllers\ListaCompraLinController;
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\TareaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::apiResource('despensas',DespensaController::class);
     Route::apiResource('units',UnitController::class);
     Route::apiResource('productos',ProductoController::class);
+    Route::apiResource('tareas',TareaController::class);
     Route::apiResource('favoritos',FavoritoController::class);
     Route::apiResource('lista_compra',ListaCompraController::class);
     Route::apiResource('lista_compra_lin',ListaCompraLinController::class);

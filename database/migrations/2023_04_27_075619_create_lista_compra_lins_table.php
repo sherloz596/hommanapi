@@ -23,7 +23,7 @@ return new class extends Migration
             //$table->unique(['cod_lista', 'linea']);
             $table->foreign('cod_lista')->references('cod_lista')->on('lista_compras');
             $table->foreign('cod_usuario')->references('id')->on('users');
-            $table->foreign('cod_producto')->references('cod_producto')->on('productos');
+            $table->foreign('cod_producto')->references('cod_producto')->on('productos')->onDelete('cascade');
         });
     }
 
