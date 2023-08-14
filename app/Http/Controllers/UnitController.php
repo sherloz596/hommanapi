@@ -146,14 +146,48 @@ class UnitController extends Controller
         }
     }
     public static function inicializar($id){
-        $units = ["Gramos","Kilos","Litros","Latas","Botellas","Bricks","Unidades","Filetes"];
+        $json = '[
+            {
+                "unidad" :"Gramos",
+                "idioma"   : "Grams"
+            },
+            {
+                "unidad" :"Kilos",
+                "idioma"   : "Kilos"
+            },
+            {
+                "unidad" :"Litros",
+                "idioma"   : "Liters"
+            },
+            {
+                "unidad" :"Latas",
+                "idioma"   : "Cans"
+            },
+            {
+                "unidad" :"Botellas",
+                "idioma"   : "Bottles"
+            },
+            {
+                "unidad" :"Bricks",
+                "idioma"   : "Bricks"
+            },
+            {
+                "unidad" :"Unidades",
+                "idioma"   : "Units"
+            },
+            {
+                "unidad" :"Filetes",
+                "idioma"   : "Fillet"
+            }
+        ]';
 
+        $units = json_decode($json);
         foreach ($units as $item){
             $unit = Unit::create([
-                'unidad' => $item,
+                'unidad' => $item->unidad,
                 'abreviatura' => "",
                 'cod_usuario' => $id,
-                'idioma' => "SPA"
+                'idioma' => $item->idioma
             ]);
         }
     }

@@ -175,7 +175,7 @@ class AlmacenajeController extends Controller
 
          $almacenaje = DB::select(
              'SELECT a.cod_almacenaje,p.cod_producto,p.producto,a.cantidad,u.unidad,a.fec_almac,
-             p.comprar,p.favorito,a.cod_despensa, a.cod_unidad 
+             p.comprar,p.favorito,a.cod_despensa, a.cod_unidad,p.idioma,u.idioma as unidioma 
              FROM `almacenajes` a
              LEFT OUTER JOIN productos p ON p.cod_producto = a.cod_producto
              LEFT OUTER JOIN units u on u.cod_unidad = a.cod_unidad
