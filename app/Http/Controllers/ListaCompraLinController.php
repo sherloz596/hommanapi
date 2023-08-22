@@ -202,6 +202,12 @@ class ListaCompraLinController extends Controller
             $cod_user = $user->invitado;
         }
 
+        if ($user -> idioma === 'SPA'){
+            $orden = 'productos.producto';
+        }else{
+            $orden = 'productos.idioma';
+        }
+
         $lista = DB::table('lista_compra_lins')
             -> leftJoin('productos','lista_compra_lins.cod_producto','=','productos.cod_producto')
             -> leftJoin('lista_compras','lista_compra_lins.cod_lista','=','lista_compras.cod_lista')
@@ -211,6 +217,7 @@ class ListaCompraLinController extends Controller
                 'lista_compra_lins.estado_producto')
             -> where('lista_compras.estado','=','En curso')
             -> where('lista_compra_lins.cod_usuario','=',$cod_user)
+            ->orderBy($orden)
             -> get();
         
         return $lista;

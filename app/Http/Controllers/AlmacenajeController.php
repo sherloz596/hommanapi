@@ -50,6 +50,8 @@ class AlmacenajeController extends Controller
         }else{
             $cod_user = $user->invitado;
         }
+        $fecha = now();
+        $fecha = $fecha->format('d/m/Y',now());
 
         $almacenaje = new Almacenaje;
         $almacenaje -> cod_usuario    = $cod_user;
@@ -57,7 +59,7 @@ class AlmacenajeController extends Controller
         $almacenaje -> cod_despensa   = $request-> cod_despensa;
         $almacenaje -> cod_unidad     = $request-> cod_unidad;
         $almacenaje -> cantidad       = $request-> cantidad;
-        $almacenaje -> fec_almac = now();
+        $almacenaje -> fec_almac = $fecha;
         $almacenaje -> save();
 
         return $almacenaje;

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('cod_despensa');
             $table->unsignedInteger('cod_unidad');
             $table->integer('cantidad');
-            $table->date('fec_almac');
+            $table->string('fec_almac');
             $table->timestamps();
             
             $table->foreign('cod_producto')->references('cod_producto')->on('productos')->onDelete('cascade');
